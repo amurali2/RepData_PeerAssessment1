@@ -29,8 +29,12 @@ head(ttlsteps)
 
 * Make a histogram of the total number of steps taken each day
 ```{r}
-hist(cleanData$steps, xlab="Number of Steps Taken Each Day", 
-main="Histogram of Number of Steps Taken Each Day")
+hist(ttlsteps, breaks=13, 
+     xlab="Number of Steps Taken Each Day", 
+     main="Histogram of Total Steps Per Each Day")
+abline(v=mean(ttlsteps), col="red", lwd=3)
+abline(v=median(ttlsteps), col="blue", lwd=3)
+legend(x="topright", legend=c("Mean","Median"), col=c("red","blue"), lwd=3)
 ```
 
 * Calculate and report the mean and median total number of steps taken per day
@@ -68,6 +72,7 @@ ggplot(avgDailyActivity, aes(interval, averageSteps)) +
 ```{r}
 avgDailyActivity[which.max(avgDailyActivity$averageSteps), ]
 ```
+The 5-minute interval which contains maximum number of steps is 835
 
 ## Imputing missing values
 
@@ -101,17 +106,21 @@ sum(is.na(filledData))
 * Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
 ```{r}
-hist(filledData$steps, xlab="Number of Steps Taken Each Day", 
-main="Histogram of Number of Steps Taken Each Day")
+newttlSteps <- aggregate(filledData$steps, 
+                           list(Date = filledData$date), 
+                           FUN = "sum")$x
+hist(newttlSteps, breaks=13, 
+     xlab="Number of Steps Taken Each Day", 
+     main="Histogram of Total Steps Per Each Day")
+abline(v=mean(newttlSteps), col="red", lwd=3)
+abline(v=median(newttlSteps), col="blue", lwd=3)
+legend(x="topright", legend=c("Mean","Median"), col=c("red","blue"), lwd=3)
 ```
 
 * Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 Mean total number of steps taken per day
 ```{r}
-newttlSteps <- aggregate(filledData$steps, 
-                           list(Date = filledData$date), 
-                           FUN = "sum")$x
 mean(newttlSteps)
 ```
 Median total number of steps taken per day

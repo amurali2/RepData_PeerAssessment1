@@ -31,8 +31,12 @@ head(ttlsteps)
 * Make a histogram of the total number of steps taken each day
 
 ```r
-hist(cleanData$steps, xlab="Number of Steps Taken Each Day", 
-main="Histogram of Number of Steps Taken Each Day")
+hist(ttlsteps, breaks=13, 
+     xlab="Number of Steps Taken Each Day", 
+     main="Histogram of Total Steps Per Each Day")
+abline(v=mean(ttlsteps), col="red", lwd=3)
+abline(v=median(ttlsteps), col="blue", lwd=3)
+legend(x="topright", legend=c("Mean","Median"), col=c("red","blue"), lwd=3)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)
@@ -91,6 +95,7 @@ avgDailyActivity[which.max(avgDailyActivity$averageSteps), ]
 ##     interval averageSteps
 ## 104      835     206.1698
 ```
+The 5-minute interval which contains maximum number of steps is 835
 
 ## Imputing missing values
 
@@ -135,8 +140,15 @@ sum(is.na(filledData))
 
 
 ```r
-hist(filledData$steps, xlab="Number of Steps Taken Each Day", 
-main="Histogram of Number of Steps Taken Each Day")
+newttlSteps <- aggregate(filledData$steps, 
+                           list(Date = filledData$date), 
+                           FUN = "sum")$x
+hist(newttlSteps, breaks=13, 
+     xlab="Number of Steps Taken Each Day", 
+     main="Histogram of Total Steps Per Each Day")
+abline(v=mean(newttlSteps), col="red", lwd=3)
+abline(v=median(newttlSteps), col="blue", lwd=3)
+legend(x="topright", legend=c("Mean","Median"), col=c("red","blue"), lwd=3)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)
@@ -146,9 +158,6 @@ main="Histogram of Number of Steps Taken Each Day")
 Mean total number of steps taken per day
 
 ```r
-newttlSteps <- aggregate(filledData$steps, 
-                           list(Date = filledData$date), 
-                           FUN = "sum")$x
 mean(newttlSteps)
 ```
 
